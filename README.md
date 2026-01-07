@@ -15,6 +15,13 @@ Multi-Matcher is a multi-model schema matching pipeline that:
 
 ## Setup
 
+### Clone the Repository
+
+```bash
+git clone https://github.com/DatabaseSchemaMatching/Multi-Matcher.git
+cd Multi-Matcher
+```
+
 ### 1) Create virtual environment (recommended)
 
 ```bash
@@ -32,6 +39,19 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+### Data Preparation
+
+Download the dataset archive from the following link and extract it to a local directory:
+
+- Dataset: https://drive.google.com/file/d/1ORXPF3W3mASLdetCnXtFevewg_hjl2jQ/view?usp=sharing
+
+After extracting, set `MULTIMATCHER_DATA_ROOT` (in `.env`) to the extracted dataset root directory so that it contains:
+
+- `M2Bench_Ecommerce/`
+- `M2Bench_Healthcare/`
+- `Unibench/`
+- `M2E_Unibench/`
 
 ### 3) Configure environment variables
 
