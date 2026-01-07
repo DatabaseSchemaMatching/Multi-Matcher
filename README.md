@@ -22,6 +22,7 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 # macOS/Linux
 source .venv/bin/activate
+```
 
 ### 2) Install dependencies
 pip install -r requirements.txt
