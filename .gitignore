@@ -1,0 +1,41 @@
+# -------------------------
+# Secrets / local env
+# -------------------------
+.env
+
+# -------------------------
+# Python cache / test cache
+# -------------------------
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# -------------------------
+# Virtual environments
+# -------------------------
+.venv/
+venv/
+ENV/
+env/
+
+# -------------------------
+# Jupyter
+# -------------------------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# -------------------------
+# Vector DB artifacts (generated)
+# -------------------------
+vectordb/
+**/vectordb/
+chroma/
+**/chroma/
+
+# -------------------------
+# OS / editor misc
+# -------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
