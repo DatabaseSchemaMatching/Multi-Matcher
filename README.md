@@ -1,19 +1,21 @@
 # Multi-Matcher: Multi-Model Schema Matching via Unified Schema and Adaptive Filtering with Pre-Trained Language Models
 
 Multi-Matcher is a multi-model schema matching pipeline that:
-1) builds schema contexts (table / document / graph),
-2) retrieves candidates via embedding cosine similarity (ChromaDB),
-3) filters candidates with adaptive thresholding (Kneedle),
-4) groups schema elements using an LLM.
+1. builds schema contexts (table / document / graph),
+2. retrieves candidates via embedding cosine similarity (ChromaDB),
+3. filters candidates with adaptive thresholding (Kneedle),
+4. groups schema elements using an LLM.
 
-# Repo Structure
+## Repo Structure
+
 - `scripts/run_dataset.py` : CLI runner
 - `src/multimatcher/` : core library
 - `.env.example` : environment variable template
 
-# Setup
+## Setup
 
-# 1) Create virtual environment (recommended)
+### 1) Create virtual environment (recommended)
+
 ```bash
 python -m venv .venv
 # Windows (PowerShell)
@@ -21,10 +23,10 @@ python -m venv .venv
 # macOS/Linux
 source .venv/bin/activate
 
-# 2) Install dependencies
+### 2) Install dependencies
 pip install -r requirements.txt
 
-# 3) Configure environment variables
+### 3) Configure environment variables
 Copy .env.example to .env and fill your keys.
 
 # Windows PowerShell
@@ -48,7 +50,7 @@ OPENAI_API_KEY=YOUR_OPENAI_KEY_HERE
 # GOOGLE_API_KEY=YOUR_GOOGLE_KEY_HERE
 # ANTHROPIC_API_KEY=YOUR_ANTHROPIC_KEY_HERE
 
-# Datasets Layout
+### Datasets Layout
 Set MULTIMATCHER_DATA_ROOT so that the following folders exist under it:
 - M2Bench_Ecommerce/
 - M2Bench_Healthcare/
@@ -87,7 +89,7 @@ Expected structure:
     grouping_candidates.csv
     group.csv
 
-# Run
+### Run
 Basic usage:
 python scripts/run_dataset.py --dataset <DATASET> --llm <LLM_ALIAS> --embedding-model text-embedding-3-large
 
@@ -118,7 +120,7 @@ python scripts/run_dataset.py --dataset unibench --llm claude-sonnet-4.5 --embed
 # Cross-dataset (M2Bench E-commerce <-> UniBench) + Qwen3-max
 python scripts/run_dataset.py --dataset m2e-unibench --llm qwen3-max --embedding-model text-embedding-3-large
 
-# Optional Flags
+### Optional Flags
 1) Override dataset root (--data-root)
 If you don’t want to set MULTIMATCHER_DATA_ROOT in .env, pass it explicitly:
 python scripts/run_dataset.py --data-root "C:\path\to\dataset" --dataset m2bench-ecommerce --llm gpt-5 --embedding-model text-embedding-3-large
@@ -137,12 +139,12 @@ python scripts/run_dataset.py --dataset m2bench-ecommerce --llm gpt-5 --temperat
 S is fixed in code, and D can be overridden:
 python scripts/run_dataset.py --dataset m2bench-ecommerce --llm gpt-5 --kneedle-d 0.85
 
-# Output
+### Output
 The runner prints:
 - dataset info and resolved paths
 - number of schema contexts
 - full raw LLM outputs (one per query element)
 
-# Notes
+### Notes
 - Keep .env out of Git (.gitignore should include .env).
 - vectordb/ is a generated artifact directory; ignore it if you don’t want to commit generated files.
