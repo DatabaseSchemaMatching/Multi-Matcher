@@ -3,11 +3,12 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+
+# B) packaging 없이 바로 실행: add repo_root/src to sys.path (minimal 3 lines)
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import argparse
 import os
-from pathlib import Path
 from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
@@ -25,6 +26,10 @@ from multimatcher.llm.registry import get_model_spec
 from multimatcher.llm.factory import build_chat_model
 from multimatcher.llm.prompts import REASONING_CANDIDATES_SYSTEM_MESSAGE
 from multimatcher.llm.grouping import run_grouping
+
+# NEW: desired outputs (cleaned groups + evaluation report)
+from multimatcher.eval.group_parse import clean_schema_groups_from_strings
+from multimatcher.eval.grouping_eval import evaluate_schema_grouping
 
 
 # Load .env from repo root (or current working directory) if present
@@ -121,7 +126,7 @@ def main() -> None:
     ap.add_argument("--embedding-model", default="text-embedding-3-large")
     ap.add_argument("--vectordb-path", default=None)
 
-    # ✅ data root (optional)
+    # data root (optional)
     ap.add_argument(
         "--data-root",
         default=None,
@@ -168,7 +173,7 @@ def main() -> None:
             "  - or placing datasets under repo_root/data\n"
         )
 
-    # ✅ pass data_root to dataset loader
+    # pass data_root to dataset loader
     bundle = load_dataset(args.dataset, data_root=str(data_root))
     all_schema_contexts = bundle.all_schema_contexts
 
@@ -238,7 +243,7 @@ def main() -> None:
     )
 
     # -----------------------------
-    # 5) Print summary + FULL LLM OUTPUTS
+    # 5) Print summary
     # -----------------------------
     print(f"[DATA_ROOT] {data_root}")
     print(f"[DATASET] {bundle.spec.name}  contexts={len(all_schema_contexts)}")
@@ -250,9 +255,20 @@ def main() -> None:
     print(f"kneedle: S={KNEEDLE_S} (fixed), D={args.kneedle_d}")
     print(f"schema_groups_raw: {len(schema_groups_raw)} items")
 
-    # FULL outputs (user requested)
-    for i, g in enumerate(schema_groups_raw, start=1):
-        print(f"\n--- group output {i} ---\n{g}")
+    # -----------------------------
+    # Desired output #1: cleaned grouping results
+    # -----------------------------
+    cleaned_groups = clean_schema_groups_from_strings(schema_groups_raw)
+    print("\n=== Cleaned grouping results ===")
+    print(f"#groups = {len(cleaned_groups)}")
+    for i, g in enumerate(cleaned_groups, start=1):
+        print(f"[Group {i}] {g}")
+
+    # -----------------------------
+    # Desired output #2: evaluation report (+ FP/FN lists)
+    # -----------------------------
+    print("\n=== Evaluation ===")
+    evaluate_schema_grouping(schema_groups=schema_groups_raw, group_path=bundle.group_path)
 
 
 if __name__ == "__main__":
